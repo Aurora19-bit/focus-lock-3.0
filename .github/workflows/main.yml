@@ -12,6 +12,11 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Unpack Project ZIP
+        run: |
+          # Automatically extract the uploaded zip archive
+          find . -maxdepth 2 -name "*.zip" -exec unzip -o {} \;
+
       - name: Set up Java 17
         uses: actions/setup-java@v4
         with:
