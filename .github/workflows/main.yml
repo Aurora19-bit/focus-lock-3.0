@@ -21,7 +21,11 @@ jobs:
           find app/src/main/java -name "MainActivity.kt" -exec sed -i 's/R\.anim\.butterfly_float/R\.anim\.ocean_float/g' {} + 2>/dev/null || true
           find app/src/main/java -name "MainActivity.kt" -exec sed -i 's/R\.anim\.sparkle_pulse/R\.anim\.bioluminescent_pulse/g' {} + 2>/dev/null || true
 
-          # 3. Create fallback animation XMLs to guarantee zero compile errors
+          # 3. Fix TextView textColor method in MainActivity.kt
+          find app/src/main/java -name "MainActivity.kt" -exec sed -i 's/textColor = 0xFF94A3B8\.toInt()/setTextColor(0xFF94A3B8\.toInt())/g' {} + 2>/dev/null || true
+          find app/src/main/java -name "MainActivity.kt" -exec sed -i 's/textColor =/setTextColor(/g' {} + 2>/dev/null || true
+
+          # 4. Create fallback animation XMLs to guarantee zero compile errors
           mkdir -p app/src/main/res/anim
           cat << 'EOF' > app/src/main/res/anim/butterfly_float.xml
           <?xml version="1.0" encoding="utf-8"?>
