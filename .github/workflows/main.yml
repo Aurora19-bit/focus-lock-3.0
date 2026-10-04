@@ -12,22 +12,10 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Extract Project ZIP (if present)
+      - name: Extract Project ZIP (if uploaded)
         run: |
+          echo "Extracting project files..."
           find . -maxdepth 2 -name "*.zip" -exec unzip -o {} \; 2>/dev/null || true
-
-      - name: Auto-Patch Kotlin Compilation Errors
-        run: |
-          echo "Patching textColor to setTextColor in all Kotlin files..."
-          find app/src/main/java -type f -name "*.kt" -exec sed -i "s/textColor =/setTextColor(/g; s/setTextColor(\(.*\)/setTextColor(\1)/g" {} + 2>/dev/null || true
-          find app/src/main/java -type f -name "*.kt" -exec sed -i "s/textColor = 0xFF94A3B8\.toInt()/setTextColor(0xFF94A3B8\.toInt())/g" {} + 2>/dev/null || true
-          find app/src/main/java -type f -name "*.kt" -exec sed -i "s/\.textColor =/\.setTextColor(/g" {} + 2>/dev/null || true
-
-          # Create fallbacks for legacy anims so R.anim references never fail
-          mkdir -p app/src/main/res/anim
-          echo '<set xmlns:android="http://schemas.android.com/apk/res/android"><translate android:fromYDelta="0" android:toYDelta="-10dp" android:duration="1000" /></set>' > app/src/main/res/anim/butterfly_float.xml
-          echo '<set xmlns:android="http://schemas.android.com/apk/res/android"><scale android:fromXScale="0.9" android:toXScale="1.1" android:fromYScale="0.9" android:toYScale="1.1" android:pivotX="50%" android:pivotY="50%" android:duration="800" /></set>' > app/src/main/res/anim/sparkle_pulse.xml
-          echo '<set xmlns:android="http://schemas.android.com/apk/res/android"><rotate android:fromDegrees="-3" android:toDegrees="3" android:pivotX="50%" android:pivotY="100%" android:duration="1500" /></set>' > app/src/main/res/anim/plant_breeze.xml
 
       - name: Set up Java 17
         uses: actions/setup-java@v4
